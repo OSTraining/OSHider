@@ -1,0 +1,8 @@
+mkdir:
+    - plugins/content/oshider
+symlinks:
+    - src/oshider.xml: plugins/content/oshider/oshider.xml
+    - src/oshider.php: plugins/content/oshider/oshider.php
+    - src/include.php: plugins/content/oshider/include.php
+    - src/style.css: plugins/content/oshider/style.css
+    - src/language: plugins/content/oshider/language

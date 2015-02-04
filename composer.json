@@ -1,0 +1,24 @@
+{
+    "name"             : "alledia/oshider",
+    "description"      : "OSHider",
+    "minimum-stability": "stable",
+    "license"          : "GPL-2+",
+    "type"             : "joomla.plugin",
+    "extra"            : {
+        "element"        : "plg_content_oshider",
+        "element-short"  : "oshider",
+        "name"           : "OSHider",
+        "folder"         : "content",
+        "client"         : "site",
+        "package-license": "free"
+    },
+    "authors"          : [
+        {
+            "name" : "Alledia",
+            "email": "support@alledia.com"
+        }
+    ],
+    "require"          : {
+        "php"       : ">= 5.3"
+    }
+}
