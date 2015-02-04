@@ -16,15 +16,17 @@
         <license>free</license>
         <relatedExtensions>
             <extension
-                type="library"
-                element="allediaframework">AllediaFramework</extension>
+                    type="library"
+                    element="allediaframework">AllediaFramework
+            </extension>
 
             <extension
-                type="plugin"
-                group="system"
-                element="ossystem"
-                publish="true"
-                ordering="first">OSSystem</extension>
+                    type="plugin"
+                    group="system"
+                    element="ossystem"
+                    publish="true"
+                    ordering="first">OSSystem
+            </extension>
         </relatedExtensions>
     </alledia>
 
@@ -38,6 +40,7 @@
     </files>
 
     <updateservers>
-        <server type="extension" priority="1" name="OSHider"><![CDATA[https://deploy.ostraining.com/client/update/free/stable/plg_content_oshider/extension.xml]]></server>
+        <server type="extension" priority="1" name="OSHider">
+            <![CDATA[https://deploy.ostraining.com/client/update/free/stable/plg_content_oshider/extension.xml]]></server>
     </updateservers>
 </extension>
