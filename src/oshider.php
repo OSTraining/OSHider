@@ -35,23 +35,8 @@ class PlgContentOSHider extends AbstractPlugin
         $this->loadLanguage();
 
     }
-
-    /**
-     * Joomla < 1.6 prepare content function
-     *
-     * Enter description here ...
-     * @param unknown_type $row
-     * @param unknown_type $params
-     * @param unknown_type $page
-     */
-    public function onPrepareContent( &$row, &$params, $page=0 )
-    {
-        $context = 'com_content.article';
-        return $this->doContentPrepare($context, $row, $params, $page);
-    }
     
     /**
-     * Joomla 1.6+ prepare content function
      *
      * @param unknown_type $context
      * @param unknown_type $article
@@ -351,28 +336,14 @@ class PlgContentOSHider extends AbstractPlugin
 	    $user = JFactory::getUser();
 	    $user_groups = array();
 	    $authorized_groups = array();
-	     
-	    if(version_compare(JVERSION,'1.6.0','ge')) {
-	        // Joomla! 1.6+ code here
-	        $authorized_groups = $user->getAuthorisedGroups();
-	        foreach ($authorized_groups as $authorized_group) {
-	            $table = JTable::getInstance('Usergroup', 'JTable');
-	            $table->load($authorized_group);
-	            $user_groups[$authorized_group] = strtolower( $table->title );
-	        }
-	    } else {
-	        // Joomla! 1.5 code here
-	        if (empty($user->id)) {
-	            $user_groups[] = 'public';
-	        } else {
-	            $user_groups[] = 'public';
-	            $user_type = strtolower($user->usertype);
-	            if (!empty($user_type)) {
-	                $user_groups[] = $user_type;
-	            }
-	        }
-	    
-	    }
+	        
+		$authorized_groups = $user->getAuthorisedGroups();
+		
+		foreach ($authorized_groups as $authorized_group) {
+			$table = JTable::getInstance('Usergroup', 'JTable');
+			$table->load($authorized_group);
+			$user_groups[$authorized_group] = strtolower( $table->title );
+		}
 
 	    $return = new stdClass();
 	    $return->group_names = $user_groups;
