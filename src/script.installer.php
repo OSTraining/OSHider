@@ -15,7 +15,7 @@ require_once 'library/Installer/include.php';
 class plgcontentoshiderInstallerScript extends AbstractScript
 {
     /**
-     * @param string $type
+     * @param string                     $type
      * @param JInstallerAdapterComponent $parent
      *
      * @return void

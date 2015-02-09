@@ -4,7 +4,7 @@
  * @contact   www.alledia.com, support@alledia.com
  * @copyright 2015 Alledia.com, All rights reserved
  * @license   http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
- * @fork Most of the code is forked from http://dioscouri.com/joomla-extensions/non-commercial-extensions/hider
+ * @fork      Most of the code is forked from http://dioscouri.com/joomla-extensions/non-commercial-extensions/hider
  */
 
 use Alledia\Framework\Joomla\Extension\AbstractPlugin;
@@ -26,7 +26,7 @@ class PlgContentOSHider extends AbstractPlugin
 
     /**
      * @param JEventDispatcher $subject
-     * @param array $config
+     * @param array            $config
      */
     public function __construct($subject, $config = array())
     {
@@ -54,6 +54,7 @@ class PlgContentOSHider extends AbstractPlugin
      * @param unknown_type $row
      * @param unknown_type $params
      * @param unknown_type $page
+     *
      * @return boolean
      */
     private function doContentPrepare($context, &$row, &$params, $page = 0)
@@ -71,7 +72,7 @@ class PlgContentOSHider extends AbstractPlugin
         $regex7 = "#{admin}(.*?){/admin}#s";
         $regex8 = "#{super}(.*?){/super}#s";
 
-        $regex9 = "#\{19}(.*?){/19}#s";
+        $regex9  = "#\{19}(.*?){/19}#s";
         $regex10 = "#\{20}(.*?){/20}#s";
         $regex11 = "#\{21}(.*?){/21}#s";
         $regex12 = "#\{23}(.*?){/23}#s";
@@ -123,11 +124,12 @@ class PlgContentOSHider extends AbstractPlugin
     /**
      *
      * @param unknown_type $matches
+     *
      * @return Ambigous <string, unknown>
      */
     private function reg(&$matches)
     {
-        $user = JFactory::getUser();
+        $user   = JFactory::getUser();
         $return = '';
 
         if (!empty($user->id)) {
@@ -140,12 +142,13 @@ class PlgContentOSHider extends AbstractPlugin
     /**
      *
      * @param unknown_type $matches
+     *
      * @return Ambigous <string, unknown>
      */
     private function pub(&$matches)
     {
 
-        $user = JFactory::getUser();
+        $user   = JFactory::getUser();
         $return = $matches[1];
 
         if (!empty($user->id)) {
@@ -158,6 +161,7 @@ class PlgContentOSHider extends AbstractPlugin
     /**
      *
      * @param unknown_type $matches
+     *
      * @return Ambigous <string, unknown>
      */
     private function author(&$matches)
@@ -176,6 +180,7 @@ class PlgContentOSHider extends AbstractPlugin
     /**
      *
      * @param unknown_type $matches
+     *
      * @return Ambigous <string, unknown>
      */
     private function editor(&$matches)
@@ -194,6 +199,7 @@ class PlgContentOSHider extends AbstractPlugin
     /**
      *
      * @param unknown_type $matches
+     *
      * @return Ambigous <string, unknown>
      */
     private function publisher(&$matches)
@@ -212,6 +218,7 @@ class PlgContentOSHider extends AbstractPlugin
     /**
      *
      * @param unknown_type $matches
+     *
      * @return Ambigous <string, unknown>
      */
     private function manager(&$matches)
@@ -230,6 +237,7 @@ class PlgContentOSHider extends AbstractPlugin
     /**
      *
      * @param unknown_type $matches
+     *
      * @return unknown
      */
     private function admin(&$matches)
@@ -248,6 +256,7 @@ class PlgContentOSHider extends AbstractPlugin
     /**
      *
      * @param unknown_type $matches
+     *
      * @return Ambigous <string, unknown>
      */
     private function super(&$matches)
@@ -269,6 +278,7 @@ class PlgContentOSHider extends AbstractPlugin
     /**
      *
      * @param unknown_type $matches
+     *
      * @return Ambigous <string, unknown>
      */
     private function special(&$matches)
@@ -299,14 +309,15 @@ class PlgContentOSHider extends AbstractPlugin
     /**
      *
      * @param unknown_type $matches
+     *
      * @return Ambigous <string, unknown>
      */
     private function user(&$matches)
     {
 
-        $user = JFactory::getUser();
-        $userid = $user->get('id');
-        $username = $user->get('username');
+        $user      = JFactory::getUser();
+        $userid    = $user->get('id');
+        $username  = $user->get('username');
         $useremail = $user->get('email');
 
         $match = $matches[1];
@@ -323,6 +334,7 @@ class PlgContentOSHider extends AbstractPlugin
     /**
      *
      * @param unknown_type $matches
+     *
      * @return Ambigous <string, unknown>
      */
     private function groups(&$matches)
@@ -359,8 +371,8 @@ class PlgContentOSHider extends AbstractPlugin
     private function getUserGroups()
     {
         // get all of the current user's groups
-        $user = JFactory::getUser();
-        $user_groups = array();
+        $user              = JFactory::getUser();
+        $user_groups       = array();
         $authorized_groups = array();
 
         $authorized_groups = $user->getAuthorisedGroups();
@@ -371,9 +383,9 @@ class PlgContentOSHider extends AbstractPlugin
             $user_groups[$authorized_group] = strtolower($table->title);
         }
 
-        $return = new stdClass();
+        $return              = new stdClass();
         $return->group_names = $user_groups;
-        $return->group_ids = $authorized_groups;
+        $return->group_ids   = $authorized_groups;
 
         return $return;
     }
