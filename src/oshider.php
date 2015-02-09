@@ -43,7 +43,7 @@ class PlgContentOSHider extends AbstractPlugin
      * @param unknown_type $params
      * @param unknown_type $page
      */
-    public function onContentPrepare($context, &$article, &$params, $page = 0)
+    public function onContentPrepare($context, $article, $params, $page = 0)
     {
         return $this->doContentPrepare($context, $article, $params, $page);
     }
@@ -57,7 +57,7 @@ class PlgContentOSHider extends AbstractPlugin
      *
      * @return boolean
      */
-    private function doContentPrepare($context, &$row, &$params, $page = 0)
+    private function doContentPrepare($context, $row, $params, $page = 0)
     {
         $success = true;
 
@@ -127,7 +127,7 @@ class PlgContentOSHider extends AbstractPlugin
      *
      * @return Ambigous <string, unknown>
      */
-    private function reg(&$matches)
+    private function reg($matches)
     {
         $user   = JFactory::getUser();
         $return = '';
@@ -145,7 +145,7 @@ class PlgContentOSHider extends AbstractPlugin
      *
      * @return Ambigous <string, unknown>
      */
-    private function pub(&$matches)
+    private function pub($matches)
     {
 
         $user   = JFactory::getUser();
@@ -164,7 +164,7 @@ class PlgContentOSHider extends AbstractPlugin
      *
      * @return Ambigous <string, unknown>
      */
-    private function author(&$matches)
+    private function author($matches)
     {
 
         $user_groups = $this->getUserGroups();
@@ -183,7 +183,7 @@ class PlgContentOSHider extends AbstractPlugin
      *
      * @return Ambigous <string, unknown>
      */
-    private function editor(&$matches)
+    private function editor($matches)
     {
 
         $user_groups = $this->getUserGroups();
@@ -202,7 +202,7 @@ class PlgContentOSHider extends AbstractPlugin
      *
      * @return Ambigous <string, unknown>
      */
-    private function publisher(&$matches)
+    private function publisher($matches)
     {
 
         $user_groups = $this->getUserGroups();
@@ -221,7 +221,7 @@ class PlgContentOSHider extends AbstractPlugin
      *
      * @return Ambigous <string, unknown>
      */
-    private function manager(&$matches)
+    private function manager($matches)
     {
 
         $user_groups = $this->getUserGroups();
@@ -240,7 +240,7 @@ class PlgContentOSHider extends AbstractPlugin
      *
      * @return unknown
      */
-    private function admin(&$matches)
+    private function admin($matches)
     {
 
         $user_groups = $this->getUserGroups();
@@ -259,7 +259,7 @@ class PlgContentOSHider extends AbstractPlugin
      *
      * @return Ambigous <string, unknown>
      */
-    private function super(&$matches)
+    private function super($matches)
     {
 
         $needles = array('super administrator', 'super users');
@@ -281,7 +281,7 @@ class PlgContentOSHider extends AbstractPlugin
      *
      * @return Ambigous <string, unknown>
      */
-    private function special(&$matches)
+    private function special($matches)
     {
 
         $needles = array(
@@ -312,7 +312,7 @@ class PlgContentOSHider extends AbstractPlugin
      *
      * @return Ambigous <string, unknown>
      */
-    private function user(&$matches)
+    private function user($matches)
     {
 
         $user      = JFactory::getUser();
@@ -337,7 +337,7 @@ class PlgContentOSHider extends AbstractPlugin
      *
      * @return Ambigous <string, unknown>
      */
-    private function groups(&$matches)
+    private function groups($matches)
     {
 
         $match = $matches[1];
