@@ -57,7 +57,7 @@ class PlgContentOSHider extends AbstractPlugin
      *
      * @return boolean
      */
-    private function doContentPrepare($context, $row, $params, $page = 0)
+    protected function doContentPrepare($context, $row, $params, $page = 0)
     {
         $success = true;
 
@@ -127,7 +127,7 @@ class PlgContentOSHider extends AbstractPlugin
      *
      * @return Ambigous <string, unknown>
      */
-    private function reg($matches)
+    protected function reg($matches)
     {
         $user   = JFactory::getUser();
         $return = '';
@@ -145,7 +145,7 @@ class PlgContentOSHider extends AbstractPlugin
      *
      * @return Ambigous <string, unknown>
      */
-    private function pub($matches)
+    protected function pub($matches)
     {
 
         $user   = JFactory::getUser();
@@ -164,7 +164,7 @@ class PlgContentOSHider extends AbstractPlugin
      *
      * @return Ambigous <string, unknown>
      */
-    private function author($matches)
+    protected function author($matches)
     {
 
         $user_groups = $this->getUserGroups();
@@ -183,7 +183,7 @@ class PlgContentOSHider extends AbstractPlugin
      *
      * @return Ambigous <string, unknown>
      */
-    private function editor($matches)
+    protected function editor($matches)
     {
 
         $user_groups = $this->getUserGroups();
@@ -202,7 +202,7 @@ class PlgContentOSHider extends AbstractPlugin
      *
      * @return Ambigous <string, unknown>
      */
-    private function publisher($matches)
+    protected function publisher($matches)
     {
 
         $user_groups = $this->getUserGroups();
@@ -221,7 +221,7 @@ class PlgContentOSHider extends AbstractPlugin
      *
      * @return Ambigous <string, unknown>
      */
-    private function manager($matches)
+    protected function manager($matches)
     {
 
         $user_groups = $this->getUserGroups();
@@ -240,7 +240,7 @@ class PlgContentOSHider extends AbstractPlugin
      *
      * @return unknown
      */
-    private function admin($matches)
+    protected function admin($matches)
     {
 
         $user_groups = $this->getUserGroups();
@@ -259,7 +259,7 @@ class PlgContentOSHider extends AbstractPlugin
      *
      * @return Ambigous <string, unknown>
      */
-    private function super($matches)
+    protected function super($matches)
     {
 
         $needles = array('super administrator', 'super users');
@@ -281,7 +281,7 @@ class PlgContentOSHider extends AbstractPlugin
      *
      * @return Ambigous <string, unknown>
      */
-    private function special($matches)
+    protected function special($matches)
     {
 
         $needles = array(
@@ -312,7 +312,7 @@ class PlgContentOSHider extends AbstractPlugin
      *
      * @return Ambigous <string, unknown>
      */
-    private function user($matches)
+    protected function user($matches)
     {
 
         $user      = JFactory::getUser();
@@ -337,7 +337,7 @@ class PlgContentOSHider extends AbstractPlugin
      *
      * @return Ambigous <string, unknown>
      */
-    private function groups($matches)
+    protected function groups($matches)
     {
 
         $match = $matches[1];
@@ -368,7 +368,7 @@ class PlgContentOSHider extends AbstractPlugin
         return $return;
     }
 
-    private function getUserGroups()
+    protected function getUserGroups()
     {
         // get all of the current user's groups
         $user              = JFactory::getUser();
