@@ -42,22 +42,10 @@ class PlgContentOSHider extends AbstractPlugin
      * @param unknown_type $article
      * @param unknown_type $params
      * @param unknown_type $page
-     */
-    public function onContentPrepare($context, $article, $params, $page = 0)
-    {
-        return $this->doContentPrepare($context, $article, $params, $page);
-    }
-
-    /**
-     *
-     * @param unknown_type $context
-     * @param unknown_type $row
-     * @param unknown_type $params
-     * @param unknown_type $page
      *
      * @return boolean
      */
-    protected function doContentPrepare($context, $row, $params, $page = 0)
+    public function onContentPrepare($context, $article, $params, $page = 0)
     {
         $success = true;
 
@@ -89,34 +77,34 @@ class PlgContentOSHider extends AbstractPlugin
         $regex17 = "#{groups:(.*?)}(.*?){/groups}#s";
 
         // perform the replacement for _reg
-        $row->text = preg_replace_callback($regex1, array($this, 'reg'), $row->text);
+        $article->text = preg_replace_callback($regex1, array($this, 'reg'), $article->text);
         // perform the replacement for _pub
-        $row->text = preg_replace_callback($regex2, array($this, 'pub'), $row->text);
+        $article->text = preg_replace_callback($regex2, array($this, 'pub'), $article->text);
 
         // perform the replacement for groups by name
-        $row->text = preg_replace_callback($regex3, array($this, 'author'), $row->text);
-        $row->text = preg_replace_callback($regex4, array($this, 'editor'), $row->text);
-        $row->text = preg_replace_callback($regex5, array($this, 'publisher'), $row->text);
-        $row->text = preg_replace_callback($regex6, array($this, 'manager'), $row->text);
-        $row->text = preg_replace_callback($regex7, array($this, 'admin'), $row->text);
-        $row->text = preg_replace_callback($regex8, array($this, 'super'), $row->text);
+        $article->text = preg_replace_callback($regex3, array($this, 'author'), $article->text);
+        $article->text = preg_replace_callback($regex4, array($this, 'editor'), $article->text);
+        $article->text = preg_replace_callback($regex5, array($this, 'publisher'), $article->text);
+        $article->text = preg_replace_callback($regex6, array($this, 'manager'), $article->text);
+        $article->text = preg_replace_callback($regex7, array($this, 'admin'), $article->text);
+        $article->text = preg_replace_callback($regex8, array($this, 'super'), $article->text);
 
         // perform the replacement for groups by gid
-        $row->text = preg_replace_callback($regex9, array($this, 'author'), $row->text);
-        $row->text = preg_replace_callback($regex10, array($this, 'editor'), $row->text);
-        $row->text = preg_replace_callback($regex11, array($this, 'publisher'), $row->text);
-        $row->text = preg_replace_callback($regex12, array($this, 'manager'), $row->text);
-        $row->text = preg_replace_callback($regex13, array($this, 'admin'), $row->text);
-        $row->text = preg_replace_callback($regex14, array($this, 'super'), $row->text);
+        $article->text = preg_replace_callback($regex9, array($this, 'author'), $article->text);
+        $article->text = preg_replace_callback($regex10, array($this, 'editor'), $article->text);
+        $article->text = preg_replace_callback($regex11, array($this, 'publisher'), $article->text);
+        $article->text = preg_replace_callback($regex12, array($this, 'manager'), $article->text);
+        $article->text = preg_replace_callback($regex13, array($this, 'admin'), $article->text);
+        $article->text = preg_replace_callback($regex14, array($this, 'super'), $article->text);
 
         // perform the replacement for user
-        $row->text = preg_replace_callback($regex15, array($this, 'user'), $row->text);
+        $article->text = preg_replace_callback($regex15, array($this, 'user'), $article->text);
 
         // perform the replacement for special
-        $row->text = preg_replace_callback($regex16, array($this, 'special'), $row->text);
+        $article->text = preg_replace_callback($regex16, array($this, 'special'), $article->text);
 
         // perform the replacement for groups
-        $row->text = preg_replace_callback($regex17, array($this, 'groups'), $row->text);
+        $article->text = preg_replace_callback($regex17, array($this, 'groups'), $article->text);
 
         return $success;
     }
