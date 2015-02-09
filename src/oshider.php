@@ -355,10 +355,8 @@ class PlgContentOSHider extends AbstractPlugin
         $return = '';
         // if the user is in any of the groups in $allowed_groups, grant access to $match[2]
         foreach ($allowed_groups as $allowed_group) {
-            if (in_array($allowed_group, $user_groups->group_ids) || in_array(
-                    $allowed_group,
-                    $user_groups->group_names
-                )
+            if (in_array($allowed_group, $user_groups->group_ids) ||
+                in_array($allowed_group, $user_groups->group_names)
             ) {
                 $return = $matches[2];
                 return $return;
