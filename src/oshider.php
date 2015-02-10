@@ -38,9 +38,9 @@ class PlgContentOSHider extends AbstractPlugin
 
     /**
      *
-     * @param string $context
-     * @param mixed $article
-     * @param mixed $params
+     * @param string  $context
+     * @param object  $article
+     * @param object  $params
      * @param integer $page
      *
      * @return boolean
