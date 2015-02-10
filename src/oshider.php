@@ -49,62 +49,27 @@ class PlgContentOSHider extends AbstractPlugin
     {
         $success = true;
 
-        // define the regular expression
+        // Added for registered vs public
         $regex1 = "#{reg}(.*?){/reg}#s";
         $regex2 = "#{pub}(.*?){/pub}#s";
 
-        $regex3 = "#{author}(.*?){/author}#s";
-        $regex4 = "#{editor}(.*?){/editor}#s";
-        $regex5 = "#{publisher}(.*?){/publisher}#s";
-        $regex6 = "#{manager}(.*?){/manager}#s";
-        $regex7 = "#{admin}(.*?){/admin}#s";
-        $regex8 = "#{super}(.*?){/super}#s";
-
-        $regex9  = "#\{19}(.*?){/19}#s";
-        $regex10 = "#\{20}(.*?){/20}#s";
-        $regex11 = "#\{21}(.*?){/21}#s";
-        $regex12 = "#\{23}(.*?){/23}#s";
-        $regex13 = "#\{24}(.*?){/24}#s";
-        $regex14 = "#\{25}(.*?){/25}#s";
-
         // added for user replacement
-        $regex15 = "#{user:(.*?)}(.*?){/user}#s";
-
-        // added for special replacement
-        $regex16 = "#{special}(.*?){/special}#s";
+        $regex3 = "#{user:(.*?)}(.*?){/user}#s";
 
         // added to support 1/more groups, in CSV format of lowercase group names
-        $regex17 = "#{groups:(.*?)}(.*?){/groups}#s";
+        $regex4 = "#{groups:(.*?)}(.*?){/groups}#s";
 
         // perform the replacement for _reg
         $article->text = preg_replace_callback($regex1, array($this, 'reg'), $article->text);
+
         // perform the replacement for _pub
         $article->text = preg_replace_callback($regex2, array($this, 'pub'), $article->text);
 
-        // perform the replacement for groups by name
-        $article->text = preg_replace_callback($regex3, array($this, 'author'), $article->text);
-        $article->text = preg_replace_callback($regex4, array($this, 'editor'), $article->text);
-        $article->text = preg_replace_callback($regex5, array($this, 'publisher'), $article->text);
-        $article->text = preg_replace_callback($regex6, array($this, 'manager'), $article->text);
-        $article->text = preg_replace_callback($regex7, array($this, 'admin'), $article->text);
-        $article->text = preg_replace_callback($regex8, array($this, 'super'), $article->text);
-
-        // perform the replacement for groups by gid
-        $article->text = preg_replace_callback($regex9, array($this, 'author'), $article->text);
-        $article->text = preg_replace_callback($regex10, array($this, 'editor'), $article->text);
-        $article->text = preg_replace_callback($regex11, array($this, 'publisher'), $article->text);
-        $article->text = preg_replace_callback($regex12, array($this, 'manager'), $article->text);
-        $article->text = preg_replace_callback($regex13, array($this, 'admin'), $article->text);
-        $article->text = preg_replace_callback($regex14, array($this, 'super'), $article->text);
-
         // perform the replacement for user
-        $article->text = preg_replace_callback($regex15, array($this, 'user'), $article->text);
-
-        // perform the replacement for special
-        $article->text = preg_replace_callback($regex16, array($this, 'special'), $article->text);
+        $article->text = preg_replace_callback($regex3, array($this, 'user'), $article->text);
 
         // perform the replacement for groups
-        $article->text = preg_replace_callback($regex17, array($this, 'groups'), $article->text);
+        $article->text = preg_replace_callback($regex4, array($this, 'groups'), $article->text);
 
         return $success;
     }
@@ -144,154 +109,6 @@ class PlgContentOSHider extends AbstractPlugin
         }
 
         return $return;
-    }
-
-    /**
-     *
-     * @param array $matches
-     *
-     * @return string
-     */
-    protected function author($matches)
-    {
-
-        $user_groups = $this->getUserGroups();
-
-        $return = '';
-        if (in_array('author', $user_groups->group_names)) {
-            $return = $matches[1];
-        }
-
-        return $return;
-    }
-
-    /**
-     *
-     * @param array $matches
-     *
-     * @return string
-     */
-    protected function editor($matches)
-    {
-
-        $user_groups = $this->getUserGroups();
-
-        $return = '';
-        if (in_array('editor', $user_groups->group_names)) {
-            $return = $matches[1];
-        }
-
-        return $return;
-    }
-
-    /**
-     *
-     * @param array $matches
-     *
-     * @return string
-     */
-    protected function publisher($matches)
-    {
-
-        $user_groups = $this->getUserGroups();
-
-        $return = '';
-        if (in_array('publisher', $user_groups->group_names)) {
-            $return = $matches[1];
-        }
-
-        return $return;
-    }
-
-    /**
-     *
-     * @param array $matches
-     *
-     * @return string
-     */
-    protected function manager($matches)
-    {
-
-        $user_groups = $this->getUserGroups();
-
-        $return = '';
-        if (in_array('manager', $user_groups->group_names)) {
-            $return = $matches[1];
-        }
-
-        return $return;
-    }
-
-    /**
-     *
-     * @param array $matches
-     *
-     * @return string
-     */
-    protected function admin($matches)
-    {
-
-        $user_groups = $this->getUserGroups();
-
-        $return = '';
-        if (in_array('administrator', $user_groups->group_names)) {
-            $return = $matches[1];
-        }
-
-        return $return;
-    }
-
-    /**
-     *
-     * @param array $matches
-     *
-     * @return string
-     */
-    protected function super($matches)
-    {
-
-        $needles = array('super administrator', 'super users');
-
-        $user_groups = $this->getUserGroups();
-
-        $return = '';
-        foreach ($needles as $needle) {
-            if (in_array($needle, $user_groups->group_names)) {
-                $return = $matches[1];
-            }
-        }
-        return $return;
-    }
-
-    /**
-     *
-     * @param array $matches
-     *
-     * @return string
-     */
-    protected function special($matches)
-    {
-
-        $needles = array(
-            'super administrator',
-            'super users',
-            'author',
-            'editor',
-            'publisher',
-            'manager',
-            'administrator'
-        );
-
-        $user_groups = $this->getUserGroups();
-
-        $return = '';
-        foreach ($needles as $needle) {
-            if (in_array($needle, $user_groups->group_names)) {
-                $return = $matches[1];
-            }
-        }
-        return $return;
-
     }
 
     /**
