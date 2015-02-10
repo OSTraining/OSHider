@@ -354,6 +354,9 @@ class PlgContentOSHider extends AbstractPlugin
         return $return;
     }
 
+    /**
+     * @return object
+     */
     protected function getUserGroups()
     {
         // get all of the current user's groups
