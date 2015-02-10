@@ -38,10 +38,10 @@ class PlgContentOSHider extends AbstractPlugin
 
     /**
      *
-     * @param unknown_type $context
-     * @param unknown_type $article
-     * @param unknown_type $params
-     * @param unknown_type $page
+     * @param string $context
+     * @param mixed $article
+     * @param mixed $params
+     * @param integer $page
      *
      * @return boolean
      */
@@ -111,9 +111,9 @@ class PlgContentOSHider extends AbstractPlugin
 
     /**
      *
-     * @param unknown_type $matches
+     * @param array $matches
      *
-     * @return Ambigous <string, unknown>
+     * @return string
      */
     protected function reg($matches)
     {
@@ -129,9 +129,9 @@ class PlgContentOSHider extends AbstractPlugin
 
     /**
      *
-     * @param unknown_type $matches
+     * @param array $matches
      *
-     * @return Ambigous <string, unknown>
+     * @return string
      */
     protected function pub($matches)
     {
@@ -148,9 +148,9 @@ class PlgContentOSHider extends AbstractPlugin
 
     /**
      *
-     * @param unknown_type $matches
+     * @param array $matches
      *
-     * @return Ambigous <string, unknown>
+     * @return string
      */
     protected function author($matches)
     {
@@ -167,9 +167,9 @@ class PlgContentOSHider extends AbstractPlugin
 
     /**
      *
-     * @param unknown_type $matches
+     * @param array $matches
      *
-     * @return Ambigous <string, unknown>
+     * @return string
      */
     protected function editor($matches)
     {
@@ -186,9 +186,9 @@ class PlgContentOSHider extends AbstractPlugin
 
     /**
      *
-     * @param unknown_type $matches
+     * @param array $matches
      *
-     * @return Ambigous <string, unknown>
+     * @return string
      */
     protected function publisher($matches)
     {
@@ -205,9 +205,9 @@ class PlgContentOSHider extends AbstractPlugin
 
     /**
      *
-     * @param unknown_type $matches
+     * @param array $matches
      *
-     * @return Ambigous <string, unknown>
+     * @return string
      */
     protected function manager($matches)
     {
@@ -224,9 +224,9 @@ class PlgContentOSHider extends AbstractPlugin
 
     /**
      *
-     * @param unknown_type $matches
+     * @param array $matches
      *
-     * @return unknown
+     * @return string
      */
     protected function admin($matches)
     {
@@ -243,9 +243,9 @@ class PlgContentOSHider extends AbstractPlugin
 
     /**
      *
-     * @param unknown_type $matches
+     * @param array $matches
      *
-     * @return Ambigous <string, unknown>
+     * @return string
      */
     protected function super($matches)
     {
@@ -265,9 +265,9 @@ class PlgContentOSHider extends AbstractPlugin
 
     /**
      *
-     * @param unknown_type $matches
+     * @param array $matches
      *
-     * @return Ambigous <string, unknown>
+     * @return string
      */
     protected function special($matches)
     {
@@ -296,9 +296,9 @@ class PlgContentOSHider extends AbstractPlugin
 
     /**
      *
-     * @param unknown_type $matches
+     * @param array $matches
      *
-     * @return Ambigous <string, unknown>
+     * @return string
      */
     protected function user($matches)
     {
@@ -321,9 +321,9 @@ class PlgContentOSHider extends AbstractPlugin
 
     /**
      *
-     * @param unknown_type $matches
+     * @param array $matches
      *
-     * @return Ambigous <string, unknown>
+     * @return string
      */
     protected function groups($matches)
     {
