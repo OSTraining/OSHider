@@ -368,9 +368,10 @@ class PlgContentOSHider extends AbstractPlugin
             $user_groups[$authorized_group] = strtolower($table->title);
         }
 
-        $return              = new stdClass();
-        $return->group_names = $user_groups;
-        $return->group_ids   = $authorized_groups;
+        $return = (object)array(
+            'group_names' => $user_groups,
+            'group_ids'   => $authorized_groups
+        );
 
         return $return;
     }
