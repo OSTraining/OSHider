@@ -357,8 +357,8 @@ class PlgContentOSHider extends AbstractPlugin
     protected function getUserGroups()
     {
         // get all of the current user's groups
-        $user              = JFactory::getUser();
-        $user_groups       = array();
+        $user        = JFactory::getUser();
+        $user_groups = array();
 
         $authorized_groups = $user->getAuthorisedGroups();
 
