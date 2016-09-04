@@ -286,10 +286,27 @@ class PlgContentOSHider extends AbstractPlugin
      */
     protected function processLegacyTags(&$text)
     {
-        // @TODO: Add support for these legacy items
-        //$regex15 = "#{user:(.*?)}(.*?){/user}#s";
-        // added to support 1/more groups, in CSV format of lowercase group names
-        //$regex17 = "#{groups:(.*?)}(.*?){/groups}#s";
+        // Let's look for the oddballs first
+        // flexible user match.
+        // NOTE: email matches will not work if email cloaking is enabled
+        if (preg_match_all('#{user:(.*?)}(.*?){/user}#s', $text, $matches)) {
+            $user = $this->getUser();
+            foreach ($matches[0] as $i => $source) {
+                $param = $matches[1][$i];
+                if ($user->id && ($param == $user->id || $param == $user->email || $param == $user->username)) {
+                    $text = str_replace($source, '', $text);
+                } else {
+                    $text = str_replace($source, $matches[2][$i], $text);
+                }
+            }
+        }
+
+        // csv Group name matches
+        if (preg_match_all('#{groups:(.*?)}(.*?){/groups}#s', $text, $matches)) {
+            foreach ($matches[0] as $i => $source) {
+                $this->replaceGroup($source, '', $matches[2][$i], $text, $matches[1][$i]);
+            }
+        }
 
         // Tags in accepted format
         $tags = array(
