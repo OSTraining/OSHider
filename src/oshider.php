@@ -60,99 +60,115 @@ class PlgContentOSHider extends AbstractPlugin
             $this->shortcodes = new OstrainingShortcodes();
         }
 
-        $codes = $this->shortcodes->find($article->text, array('oshide', 'osshow'));
+        $codes = $this->shortcodes->find($article->text, array('osshow', 'oshide'));
         foreach ($codes as $shortcode => $items) {
-            switch ($shortcode) {
-                case 'osshow':
-                case 'oshide':
-                    $show = $shortcode == 'osshow';
-                    foreach ($items as $item) {
-                        foreach ($item->params as $param => $value) {
-                            $method = 'match' . ucfirst(strtolower($param));
-                            if (method_exists($this, $method)) {
-                                $match    = $show ? $item->content : '';
-                                $mismatch = $show ? '' : $item->content;
-                                if ($this->$method($value)) {
-                                    $article->text = str_replace($item->source, $match, $article->text);
-                                } else {
-                                    $article->text = str_replace($item->source, $mismatch, $article->text);
-                                }
-                            }
-                        }
+            $show = $shortcode == 'osshow';
+            foreach ($items as $item) {
+                foreach ($item->params as $param => $value) {
+                    $method = 'replace' . ucfirst(strtolower($param));
+                    if (method_exists($this, $method)) {
+                        $match    = $show ? $item->content : '';
+                        $mismatch = $show ? '' : $item->content;
+                        $this->$method($item->source, $match, $mismatch, $article->text, $value);
                     }
-                    break;
+                }
             }
         }
     }
 
     /**
-     * @return bool
+     * @param string $source
+     * @param string $match
+     * @param string $mismatch
+     * @param string $text
      */
-    protected function matchRegistered()
+    protected function replaceRegistered($source, $match, $mismatch, &$text)
     {
-        return !$this->getUser()->guest;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function matchGuest()
-    {
-        return (bool)$this->getUser()->guest;
-    }
-
-    /**
-     * @param string $paramValue
-     *
-     * @return bool
-     */
-    protected function matchUserid($paramValue)
-    {
-        if ($userIds = array_filter(array_map('intval', explode(',', $paramValue)))) {
-            $user = JFactory::getUser();
-            return in_array($user->id, $userIds);
+        if ($this->getUser()->guest) {
+            $text = str_replace($source, $mismatch, $text);
+        } else {
+            $text = str_replace($source, $match, $text);
         }
-
-        return false;
     }
 
     /**
-     * @param string $paramValue
-     *
-     * @return bool
+     * @param string $source
+     * @param string $match
+     * @param string $mismatch
+     * @param string $text
      */
-    protected function matchEmail($paramValue)
+    protected function replaceGuest($source, $match, $mismatch, &$text)
     {
-        if ($emailAddresses = array_filter(array_map('trim', explode(',', $paramValue)))) {
-            return in_array($this->getUser()->email, $emailAddresses);
+        if ($this->getUser()->guest) {
+            $text = str_replace($source, $match, $text);
+        } else {
+            $text = str_replace($source, $mismatch, $text);
         }
-
-        return false;
     }
 
     /**
+     * @param string $source
+     * @param string $match
+     * @param string $mismatch
+     * @param string $text
      * @param string $paramValue
-     *
-     * @return bool
      */
-    protected function matchUsername($paramValue)
+    protected function replaceUserid($source, $match, $mismatch, &$text, $paramValue)
     {
-        if ($usernames = array_filter(array_map('trim', explode(',', $paramValue)))) {
-            return in_array($this->getUser()->username, $usernames);
+        $userIds = array_filter(array_map('intval', explode(',', $paramValue)));
+        $user    = JFactory::getUser();
+        if (in_array($user->id, $userIds)) {
+            $text = str_replace($source, $match, $text);
+        } else {
+            $text = str_replace($source, $mismatch, $text);
         }
-
-        return false;
     }
 
     /**
+     * @param string $source
+     * @param string $match
+     * @param string $mismatch
+     * @param string $text
      * @param string $paramValue
-     *
-     * @return bool
      */
-    protected function matchGroup($paramValue)
+    protected function replaceEmail($source, $match, $mismatch, &$text, $paramValue)
     {
-        $groups = explode(',', strtolower($paramValue));
-        $allGroups      = $this->getUsergroups();
+        $emailAddresses = array_filter(array_map('trim', explode(',', $paramValue)));
+        if (in_array($this->getUser()->email, $emailAddresses)) {
+            $text = str_replace($source, $match, $text);
+        } else {
+            $text = str_replace($source, $mismatch, $text);
+        }
+    }
+
+    /**
+     * @param string $source
+     * @param string $match
+     * @param string $mismatch
+     * @param string $text
+     * @param string $paramValue
+     */
+    protected function replaceUsername($source, $match, $mismatch, &$text, $paramValue)
+    {
+        $usernames = array_filter(array_map('trim', explode(',', $paramValue)));
+        if (in_array($this->getUser()->username, $usernames)) {
+            $text = str_replace($source, $match, $text);
+        } else {
+            $text = str_replace($source, $mismatch, $text);
+        }
+    }
+
+    /**
+     * @param string $source
+     * @param string $match
+     * @param string $mismatch
+     * @param string $text
+     * @param string $paramValue
+     */
+    protected function replaceGroup($source, $match, $mismatch, &$text, $paramValue)
+    {
+        $groups    = explode(',', strtolower($paramValue));
+        $allGroups = $this->getUsergroups();
 
         if (preg_match('/[a-z]/', $paramValue)) {
             $selectedGroups = array_keys(array_intersect($allGroups, array_filter(array_map('trim', $groups))));
@@ -161,17 +177,23 @@ class PlgContentOSHider extends AbstractPlugin
             $selectedGroups = array_filter(array_map('intval', $groups));
         }
 
-        return (bool)array_intersect($selectedGroups, $this->getUser()->getAuthorisedGroups());
+        if (array_intersect($selectedGroups, $this->getUser()->getAuthorisedGroups())) {
+            $text = str_replace($source, $match, $text);
+        } else {
+            $text = str_replace($source, $mismatch, $text);
+        }
     }
 
     /**
+     * @param string $source
+     * @param string $match
+     * @param string $mismatch
+     * @param string $text
      * @param string $paramValue
-     *
-     * @return bool
      */
-    protected function matchAccess($paramValue)
+    protected function replaceAccess($source, $match, $mismatch, &$text, $paramValue)
     {
-        $access = explode(',', strtolower($paramValue));
+        $access    = explode(',', strtolower($paramValue));
         $allAccess = $this->getAccessLevels();
 
         if (preg_match('/[a-z]/', $paramValue)) {
@@ -181,7 +203,11 @@ class PlgContentOSHider extends AbstractPlugin
             $selectedAccess = array_filter(array_map('intval', $access));
         }
 
-        return (bool)array_intersect($selectedAccess, $this->getUser()->getAuthorisedViewLevels());
+        if (array_intersect($selectedAccess, $this->getUser()->getAuthorisedViewLevels())) {
+            $text = str_replace($source, $match, $text);
+        } else {
+            $text = str_replace($source, $mismatch, $text);
+        }
     }
 
     /**
