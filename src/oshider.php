@@ -29,7 +29,7 @@ class PlgContentOSHider extends AbstractPlugin
     /**
      * @var OstrainingShortcodes
      */
-    protected $shortcodes = null;
+    protected $finder = null;
 
     /**
      * @var JUser
@@ -56,13 +56,9 @@ class PlgContentOSHider extends AbstractPlugin
             return;
         }
 
-        if ($this->shortcodes === null) {
-            $this->shortcodes = new OstrainingShortcodes();
-        }
-
-        $codes = $this->shortcodes->find($article->text, array('osshow', 'oshide'));
-        foreach ($codes as $shortcode => $items) {
-            $show = $shortcode == 'osshow';
+        $codes = $this->find($article->text, array('osshow', 'oshide'));
+        foreach ($codes as $code => $items) {
+            $show = ($code == 'osshow');
             foreach ($items as $item) {
                 foreach ($item->params as $param => $value) {
                     $method = 'replace' . ucfirst(strtolower($param));
@@ -74,6 +70,27 @@ class PlgContentOSHider extends AbstractPlugin
                 }
             }
         }
+
+        if ($this->params->get('legacy', 1)) {
+            $this->processLegacyTags($article->text);
+        }
+    }
+
+    /**
+     * Find the selected shortcode tags in the supplied text
+     *
+     * @param string   $text
+     * @param string[] $codes
+     *
+     * @return object[]
+     */
+    protected function find($text, array $codes)
+    {
+        if ($this->finder === null) {
+            $this->finder = new OstrainingShortcodes();
+        }
+
+        return $this->finder->find($text, $codes);
     }
 
     /**
@@ -197,7 +214,7 @@ class PlgContentOSHider extends AbstractPlugin
         $allAccess = $this->getAccessLevels();
 
         if (preg_match('/[a-z]/', $paramValue)) {
-            $selectedAccess = array_keys(array_intersect($allAccess, array_filter(array_map('trim', $allAccess))));
+            $selectedAccess = array_keys(array_intersect($allAccess, array_filter(array_map('trim', $access))));
 
         } else {
             $selectedAccess = array_filter(array_map('intval', $access));
@@ -260,5 +277,72 @@ class PlgContentOSHider extends AbstractPlugin
         }
 
         return $this->accessLevels;
+    }
+
+    /**
+     * Process tags that were supported by the Dioscury Hider plugin
+     *
+     * @param $text
+     */
+    protected function processLegacyTags(&$text)
+    {
+        // @TODO: Add support for these legacy items
+        //$regex15 = "#{user:(.*?)}(.*?){/user}#s";
+        // added to support 1/more groups, in CSV format of lowercase group names
+        //$regex17 = "#{groups:(.*?)}(.*?){/groups}#s";
+
+        // Tags in accepted format
+        $tags = array(
+            'author'    => 'author',
+            'editor'    => 'editor',
+            'publisher' => 'publisher',
+            'manager'   => 'manager',
+            'admin'     => 'administrator',
+            'super'     => 'super users',
+            'reg'       => null,
+            'register'  => null,
+            'pub'       => null,
+            'special'   => null,
+            '19'        => null,
+            '20'        => null,
+            '21'        => null,
+            '23'        => null,
+            '24'        => null,
+            '25'        => null,
+        );
+
+        $codes = $this->find($text, array_keys($tags));
+        foreach ($codes as $code => $items) {
+            foreach ($items as $item) {
+                if ((int)$code) {
+                    // Hide from users in group ID
+                    $this->replaceGroup($item->source, '', $item->content, $text, $code);
+
+                } else {
+                    switch ($code) {
+                        case 'reg':
+                        case 'register':
+                            // Hide from registered users
+                            $this->replaceRegistered($item->source, '', $item->content, $text);
+                            break;
+
+                        case 'pub':
+                            // Hide from public/guest users
+                            $this->replaceGuest($item->source, '', $item->content, $text);
+                            break;
+
+                        case 'special':
+                            // Hide from user in 'special' access level
+                            $this->replaceAccess($item->source, '', $item->content, $text, $code);
+                            break;
+
+                        default:
+                            // Hide from named user group
+                            $this->replaceGroup($item->source, '', $item->content, $text, $tags[$code]);
+                            break;
+                    }
+                }
+            }
+        }
     }
 }

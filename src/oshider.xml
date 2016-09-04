@@ -17,14 +17,16 @@
         <relatedExtensions>
             <extension
                 type="library"
-                element="allediaframework">AllediaFramework</extension>
+                element="allediaframework">AllediaFramework
+            </extension>
 
             <extension
                 type="plugin"
                 group="system"
                 element="ossystem"
                 publish="false"
-                ordering="first">OSSystem</extension>
+                ordering="first">OSSystem
+            </extension>
         </relatedExtensions>
     </alledia>
 
@@ -39,7 +41,25 @@
         <filename>include.php</filename>
     </files>
 
+    <config>
+        <fields name="params">
+            <fieldset name="basic">
+                <field
+                    name="legacy"
+                    label="PLG_CONTENT_OSHIDER_CONFIG_LEGACY_LABEL"
+                    description="PLG_CONTENT_OSHIDER_CONFIG_LEGACY_DESC"
+                    type="radio"
+                    class="btn-group btn-group-yesno"
+                    default="1">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+            </fieldset>
+        </fields>
+    </config>
+
     <updateservers>
-        <server type="extension" priority="1" name="OSHider"><![CDATA[https://deploy.ostraining.com/client/update/free/stable/plg_content_oshider/extension.xml]]></server>
+        <server type="extension" priority="1" name="OSHider">
+            <![CDATA[https://deploy.ostraining.com/client/update/free/stable/plg_content_oshider/extension.xml]]></server>
     </updateservers>
 </extension>
