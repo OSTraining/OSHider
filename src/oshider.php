@@ -24,175 +24,215 @@ class PlgContentOSHider extends AbstractPlugin
      */
     protected $namespace = 'OSHider';
 
-    /**
-     * @param JEventDispatcher $subject
-     * @param array            $config
-     */
-    public function __construct($subject, $config = array())
-    {
-        parent::__construct($subject, $config);
-
-        $this->loadLanguage();
-
-    }
+    protected $autoloadLanguage = true;
 
     /**
-     *
-     * @param string  $context
-     * @param object  $article
-     * @param object  $params
-     * @param integer $page
-     *
-     * @return boolean
+     * @var OstrainingShortcodes
      */
-    public function onContentPrepare($context, $article, $params, $page = 0)
-    {
-        $success = true;
-
-        // Added for registered vs public
-        $regex1 = "#{reg}(.*?){/reg}#s";
-        $regex2 = "#{pub}(.*?){/pub}#s";
-
-        // added for user replacement
-        $regex3 = "#{user:(.*?)}(.*?){/user}#s";
-
-        // added to support 1/more groups, in CSV format of lowercase group names
-        $regex4 = "#{groups:(.*?)}(.*?){/groups}#s";
-
-        // perform the replacement for _reg
-        $article->text = preg_replace_callback($regex1, array($this, 'reg'), $article->text);
-
-        // perform the replacement for _pub
-        $article->text = preg_replace_callback($regex2, array($this, 'pub'), $article->text);
-
-        // perform the replacement for user
-        $article->text = preg_replace_callback($regex3, array($this, 'user'), $article->text);
-
-        // perform the replacement for groups
-        $article->text = preg_replace_callback($regex4, array($this, 'groups'), $article->text);
-
-        return $success;
-    }
+    protected $shortcodes = null;
 
     /**
-     *
-     * @param array $matches
-     *
-     * @return string
+     * @var JUser
      */
-    protected function reg($matches)
-    {
-        $user   = JFactory::getUser();
-        $return = '';
+    protected $user = null;
 
-        if (!empty($user->id)) {
-            $return = $matches[1];
+    /**
+     * @var string[]
+     */
+    protected $userGroups = null;
+
+    /**
+     * @var string[]
+     */
+    protected $accessLevels = null;
+
+    /**
+     * @param string $context
+     * @param object $article
+     */
+    public function onContentPrepare($context, $article)
+    {
+        if (JFactory::getApplication()->isAdmin()) {
+            return;
         }
 
-        return $return;
-    }
-
-    /**
-     *
-     * @param array $matches
-     *
-     * @return string
-     */
-    protected function pub($matches)
-    {
-
-        $user   = JFactory::getUser();
-        $return = $matches[1];
-
-        if (!empty($user->id)) {
-            $return = '';
+        if ($this->shortcodes === null) {
+            $this->shortcodes = new OstrainingShortcodes();
         }
 
-        return $return;
+        $codes = $this->shortcodes->find($article->text, array('oshide', 'osshow'));
+        foreach ($codes as $shortcode => $items) {
+            switch ($shortcode) {
+                case 'osshow':
+                case 'oshide':
+                    $show = $shortcode == 'osshow';
+                    foreach ($items as $item) {
+                        foreach ($item->params as $param => $value) {
+                            $method = 'match' . ucfirst(strtolower($param));
+                            if (method_exists($this, $method)) {
+                                $match    = $show ? $item->content : '';
+                                $mismatch = $show ? '' : $item->content;
+                                if ($this->$method($value)) {
+                                    $article->text = str_replace($item->source, $match, $article->text);
+                                } else {
+                                    $article->text = str_replace($item->source, $mismatch, $article->text);
+                                }
+                            }
+                        }
+                    }
+                    break;
+            }
+        }
     }
 
     /**
-     *
-     * @param array $matches
-     *
-     * @return string
+     * @return bool
      */
-    protected function user($matches)
+    protected function matchRegistered()
     {
+        return !$this->getUser()->guest;
+    }
 
-        $user      = JFactory::getUser();
-        $userid    = $user->get('id');
-        $username  = $user->get('username');
-        $useremail = $user->get('email');
+    /**
+     * @return bool
+     */
+    protected function matchGuest()
+    {
+        return (bool)$this->getUser()->guest;
+    }
 
-        $match = $matches[1];
-
-        $return = '';
-
-        if (($match == $username) || ($match == $useremail) || ($match == strval($userid))) {
-            $return = $matches[2];
+    /**
+     * @param string $paramValue
+     *
+     * @return bool
+     */
+    protected function matchUserid($paramValue)
+    {
+        if ($userIds = array_filter(array_map('intval', explode(',', $paramValue)))) {
+            $user = JFactory::getUser();
+            return in_array($user->id, $userIds);
         }
 
-        return $return;
+        return false;
     }
 
     /**
+     * @param string $paramValue
      *
-     * @param array $matches
-     *
-     * @return string
+     * @return bool
      */
-    protected function groups($matches)
+    protected function matchEmail($paramValue)
     {
+        if ($emailAddresses = array_filter(array_map('trim', explode(',', $paramValue)))) {
+            return in_array($this->getUser()->email, $emailAddresses);
+        }
 
-        $match = $matches[1];
-        // explode $match by ,
-        $allowed_groups = explode(',', $match);
-        foreach ($allowed_groups as $key => $allowed_group) {
-            $allowed_groups[$key] = strtolower(trim($allowed_group));
-            if (empty($allowed_groups[$key])) {
-                unset($allowed_groups[$key]);
+        return false;
+    }
+
+    /**
+     * @param string $paramValue
+     *
+     * @return bool
+     */
+    protected function matchUsername($paramValue)
+    {
+        if ($usernames = array_filter(array_map('trim', explode(',', $paramValue)))) {
+            return in_array($this->getUser()->username, $usernames);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $paramValue
+     *
+     * @return bool
+     */
+    protected function matchGroup($paramValue)
+    {
+        $groups = explode(',', strtolower($paramValue));
+        $allGroups      = $this->getUsergroups();
+
+        if (preg_match('/[a-z]/', $paramValue)) {
+            $selectedGroups = array_keys(array_intersect($allGroups, array_filter(array_map('trim', $groups))));
+
+        } else {
+            $selectedGroups = array_filter(array_map('intval', $groups));
+        }
+
+        return (bool)array_intersect($selectedGroups, $this->getUser()->getAuthorisedGroups());
+    }
+
+    /**
+     * @param string $paramValue
+     *
+     * @return bool
+     */
+    protected function matchAccess($paramValue)
+    {
+        $access = explode(',', strtolower($paramValue));
+        $allAccess = $this->getAccessLevels();
+
+        if (preg_match('/[a-z]/', $paramValue)) {
+            $selectedAccess = array_keys(array_intersect($allAccess, array_filter(array_map('trim', $allAccess))));
+
+        } else {
+            $selectedAccess = array_filter(array_map('intval', $access));
+        }
+
+        return (bool)array_intersect($selectedAccess, $this->getUser()->getAuthorisedViewLevels());
+    }
+
+    /**
+     * @return JUser
+     */
+    protected function getUser()
+    {
+        if ($this->user === null) {
+            $this->user = JFactory::getUser();
+        }
+
+        return $this->user;
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getUsergroups()
+    {
+        if ($this->userGroups === null) {
+            $db = JFactory::getDbo();
+
+            $db->setQuery('Select id,title From #__usergroups');
+            $groups = $db->loadObjectList();
+
+            $this->userGroups = array();
+            foreach ($groups as $group) {
+                $this->userGroups[$group->id] = strtolower($group->title);
             }
         }
 
-        $user_groups = $this->getUserGroups();
-
-        $return = '';
-        // if the user is in any of the groups in $allowed_groups, grant access to $match[2]
-        foreach ($allowed_groups as $allowed_group) {
-            if (in_array($allowed_group, $user_groups->group_ids) ||
-                in_array($allowed_group, $user_groups->group_names)
-            ) {
-                $return = $matches[2];
-                return $return;
-            }
-        }
-
-        return $return;
+        return $this->userGroups;
     }
 
     /**
-     * @return object
+     * @return string[]
      */
-    protected function getUserGroups()
+    protected function getAccessLevels()
     {
-        // get all of the current user's groups
-        $user        = JFactory::getUser();
-        $user_groups = array();
+        if ($this->accessLevels === null) {
+            $db = JFactory::getDbo();
 
-        $authorized_groups = $user->getAuthorisedGroups();
+            $db->setQuery('Select id, title From #__viewlevels');
+            $accessLevels = $db->loadObjectList();
 
-        foreach ($authorized_groups as $authorized_group) {
-            $table = JTable::getInstance('Usergroup', 'JTable');
-            $table->load($authorized_group);
-            $user_groups[$authorized_group] = strtolower($table->title);
+            $this->accessLevels = array();
+            foreach ($accessLevels as $accessLevel) {
+                $this->accessLevels[$accessLevel->id] = strtolower($accessLevel->title);
+            }
         }
 
-        $return = (object)array(
-            'group_names' => $user_groups,
-            'group_ids'   => $authorized_groups
-        );
-
-        return $return;
+        return $this->accessLevels;
     }
 }

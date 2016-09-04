@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension version="2.5" type="plugin" group="content" method="upgrade">
-    <name>plg_content_oshider</name>
+<extension version="3.5" type="plugin" group="content" method="upgrade">
+    <name>PLG_CONTENT_OSHIDER</name>
     <author>Alledia</author>
-    <creationDate>January 23 2015</creationDate>
-    <copyright>Copyright (C) 2015 Alledia.com</copyright>
+    <creationDate>September 4, 2016</creationDate>
+    <copyright>Copyright (C) 2016 Alledia.com</copyright>
     <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
     <authorEmail>support@alledia.com</authorEmail>
     <authorUrl>http://www.alledia.com</authorUrl>
@@ -11,36 +11,35 @@
     <description>PLG_CONTENT_OSHIDER_DESCRIPTION</description>
 
     <alledia>
-        <element publish="true" ordering="last">oshider</element>
+        <element publish="false" ordering="last">oshider</element>
         <namespace>OSHider</namespace>
         <license>free</license>
         <relatedExtensions>
             <extension
-                    type="library"
-                    element="allediaframework">AllediaFramework
-            </extension>
+                type="library"
+                element="allediaframework">AllediaFramework</extension>
 
             <extension
-                    type="plugin"
-                    group="system"
-                    element="ossystem"
-                    publish="true"
-                    ordering="first">OSSystem
-            </extension>
+                type="plugin"
+                group="system"
+                element="ossystem"
+                publish="false"
+                ordering="first">OSSystem</extension>
         </relatedExtensions>
     </alledia>
 
     <scriptfile>script.installer.php</scriptfile>
 
     <files>
+        <folder>assets</folder>
         <folder>language</folder>
         <folder>library</folder>
+        <folder>views</folder>
         <filename plugin="oshider">oshider.php</filename>
         <filename>include.php</filename>
     </files>
 
     <updateservers>
-        <server type="extension" priority="1" name="OSHider">
-            <![CDATA[https://deploy.ostraining.com/client/update/free/stable/plg_content_oshider/extension.xml]]></server>
+        <server type="extension" priority="1" name="OSHider"><![CDATA[https://deploy.ostraining.com/client/update/free/stable/plg_content_oshider/extension.xml]]></server>
     </updateservers>
 </extension>

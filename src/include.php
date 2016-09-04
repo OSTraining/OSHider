@@ -8,9 +8,14 @@
 
 defined('_JEXEC') or die();
 
-define('OSHIDER_PLUGIN_PATH', __DIR__);
+// Initialize if needed
+if (!defined('OSHIDER_PLUGIN_PATH')) {
+    define('OSHIDER_PLUGIN_PATH', __DIR__);
 
-// Alledia Framework
+    JLoader::register('OstrainingShortcodes', __DIR__ . '/assets/shortcodes.php');
+}
+
+// Init Alledia Framework if needed
 if (!defined('ALLEDIA_FRAMEWORK_LOADED')) {
     $allediaFrameworkPath = JPATH_SITE . '/libraries/allediaframework/include.php';
 
