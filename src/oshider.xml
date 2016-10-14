@@ -2,12 +2,12 @@
 <extension version="3.5" type="plugin" group="content" method="upgrade">
     <name>PLG_CONTENT_OSHIDER</name>
     <author>Alledia</author>
-    <creationDate>September 4, 2016</creationDate>
+    <creationDate>October 14, 2016</creationDate>
     <copyright>Copyright (C) 2016 Alledia.com</copyright>
     <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
     <authorEmail>support@alledia.com</authorEmail>
     <authorUrl>http://www.alledia.com</authorUrl>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <description>PLG_CONTENT_OSHIDER_DESCRIPTION</description>
 
     <alledia>
