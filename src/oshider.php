@@ -294,9 +294,9 @@ class PlgContentOSHider extends AbstractPlugin
             foreach ($matches[0] as $i => $source) {
                 $param = $matches[1][$i];
                 if ($user->id && ($param == $user->id || $param == $user->email || $param == $user->username)) {
-                    $text = str_replace($source, '', $text);
-                } else {
                     $text = str_replace($source, $matches[2][$i], $text);
+                } else {
+                    $text = str_replace($source, '', $text);
                 }
             }
         }
@@ -304,7 +304,7 @@ class PlgContentOSHider extends AbstractPlugin
         // csv Group name matches
         if (preg_match_all('#{groups:(.*?)}(.*?){/groups}#s', $text, $matches)) {
             foreach ($matches[0] as $i => $source) {
-                $this->replaceGroup($source, '', $matches[2][$i], $text, $matches[1][$i]);
+                $this->replaceGroup($source, $matches[2][$i], '', $text, $matches[1][$i]);
             }
         }
 
