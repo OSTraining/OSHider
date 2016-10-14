@@ -30,7 +30,7 @@ The basic shortcodes are {osshow} and {oshide} with parameters.
 
 ## Legacy Support
 OSHider optionally supports the shortcodes from the Dioscuri plugin that was the inspiration for OSHider.
-These shortcodes will hide enclosed content as follows:
+These shortcodes will show enclosed content as follows:
 
 * Login status
   * {reg}{/reg}
