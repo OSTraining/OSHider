@@ -332,30 +332,30 @@ class PlgContentOSHider extends AbstractPlugin
         foreach ($codes as $code => $items) {
             foreach ($items as $item) {
                 if ((int)$code) {
-                    // Hide from users in group ID
-                    $this->replaceGroup($item->source, '', $item->content, $text, $code);
+                    // Show only to users in group ID
+                    $this->replaceGroup($item->source, $item->content, '', $text, $code);
 
                 } else {
                     switch ($code) {
                         case 'reg':
                         case 'register':
-                            // Hide from registered users
-                            $this->replaceRegistered($item->source, '', $item->content, $text);
+                            // Show only to registered users
+                            $this->replaceRegistered($item->source, $item->content, '', $text);
                             break;
 
                         case 'pub':
-                            // Hide from public/guest users
-                            $this->replaceGuest($item->source, '', $item->content, $text);
+                            // Show only to public/guest users
+                            $this->replaceGuest($item->source, $item->content, '', $text);
                             break;
 
                         case 'special':
-                            // Hide from user in 'special' access level
-                            $this->replaceAccess($item->source, '', $item->content, $text, $code);
+                            // Show only to user in 'special' access level
+                            $this->replaceAccess($item->source, $item->content, '', $text, $code);
                             break;
 
                         default:
-                            // Hide from named user group
-                            $this->replaceGroup($item->source, '', $item->content, $text, $tags[$code]);
+                            // Show only to named user group
+                            $this->replaceGroup($item->source, $item->content, '', $text, $tags[$code]);
                             break;
                     }
                 }
