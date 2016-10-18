@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * @package   Shortcode utility
  * @contact   www.ostraining.com, support@ostraining.com
