@@ -12,7 +12,7 @@ defined('_JEXEC') or die();
 if (!defined('SHACKHIDER_PLUGIN_PATH')) {
     define('SHACKHIDER_PLUGIN_PATH', __DIR__);
 
-    JLoader::register('OstrainingShortcodes', __DIR__ . '/assets/shortcodes.php');
+    JLoader::register('JoomlashackShortcodes', __DIR__ . '/assets/shortcodes.php');
 }
 
 // Init Alledia Framework if needed

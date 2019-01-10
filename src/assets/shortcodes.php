@@ -9,7 +9,7 @@
 defined('_JEXEC') or die();
 
 /**
- * Class OstrainingShortcodes
+ * Class JoomlashackShortcodes
  *
  * Generic processor for custom short codes.
  *
@@ -23,7 +23,7 @@ defined('_JEXEC') or die();
  *
  * Usage:
  *
- * $shortcodes = new OstrainingShortcodes()
+ * $shortcodes = new JoomlashackShortcodes()
  * $items = $shortcodes->find($string, array('yourshortcode'));
  *
  * $items is an associative array keyed on the shortcode matched with each item object returned as:
@@ -33,7 +33,7 @@ defined('_JEXEC') or die();
  * @var string   $content The text between opening and closing tag or null for unclosed tag
  *
  */
-class OstrainingShortcodes
+class JoomlashackShortcodes
 {
     /**
      * @param string   $text       The text to search

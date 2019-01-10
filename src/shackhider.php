@@ -27,7 +27,7 @@ class PlgContentShackhider extends AbstractPlugin
     protected $autoloadLanguage = true;
 
     /**
-     * @var OstrainingShortcodes
+     * @var JoomlashackShortcodes
      */
     protected $finder = null;
 
@@ -87,7 +87,7 @@ class PlgContentShackhider extends AbstractPlugin
     protected function find($text, array $codes)
     {
         if ($this->finder === null) {
-            $this->finder = new OstrainingShortcodes();
+            $this->finder = new JoomlashackShortcodes();
         }
 
         return $this->finder->find($text, $codes);
