@@ -49,6 +49,9 @@ class PlgContentShackhider extends AbstractPlugin
     /**
      * @param string $context
      * @param object $article
+     *
+     * @return void
+     * @throws Exception
      */
     public function onContentPrepare($context, $article)
     {
@@ -56,9 +59,9 @@ class PlgContentShackhider extends AbstractPlugin
             return;
         }
 
-        $codes = $this->find($article->text, array('osshow', 'oshide'));
+        $codes = $this->find($article->text, array('jsshow', 'jshide'));
         foreach ($codes as $code => $items) {
-            $show = ($code == 'osshow');
+            $show = ($code == 'jsshow');
             foreach ($items as $item) {
                 foreach ($item->params as $param => $value) {
                     $method = 'replace' . ucfirst(strtolower($param));
@@ -247,7 +250,11 @@ class PlgContentShackhider extends AbstractPlugin
         if ($this->userGroups === null) {
             $db = JFactory::getDbo();
 
-            $db->setQuery('Select id,title From #__usergroups');
+            $db->setQuery(
+                $db->getQuery(true)
+                    ->select('id,title')
+                    ->from('#__usergroups')
+            );
             $groups = $db->loadObjectList();
 
             $this->userGroups = array();
@@ -267,7 +274,11 @@ class PlgContentShackhider extends AbstractPlugin
         if ($this->accessLevels === null) {
             $db = JFactory::getDbo();
 
-            $db->setQuery('Select id, title From #__viewlevels');
+            $db->setQuery(
+                $db->getQuery(true)
+                    ->select('id, title')
+                    ->from('#__viewlevels')
+            );
             $accessLevels = $db->loadObjectList();
 
             $this->accessLevels = array();
@@ -286,9 +297,12 @@ class PlgContentShackhider extends AbstractPlugin
      */
     protected function processLegacyTags(&$text)
     {
-        // Let's look for the oddballs first
-        // flexible user match.
-        // NOTE: email matches will not work if email cloaking is enabled
+        /*
+         * Let's look for the oddballs first
+         * flexible user match.
+         *
+         * NOTE: email matches will not work if email cloaking is enabled
+         */
         if (preg_match_all('#{user:(.*?)}(.*?){/user}#s', $text, $matches)) {
             $user = $this->getUser();
             foreach ($matches[0] as $i => $source) {
