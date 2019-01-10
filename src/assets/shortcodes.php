@@ -1,8 +1,8 @@
 <?php
 /**
  * @package   Shortcode utility
- * @contact   www.ostraining.com, support@ostraining.com
- * @copyright 2016 Open Source Training, LLC. All rights reserved
+ * @contact   www.joomlashack.com, help@joomlashack.com
+ * @copyright 2016-2019 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
