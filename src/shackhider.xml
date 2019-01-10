@@ -22,22 +22,6 @@
         <filename>include.php</filename>
     </files>
 
-    <config>
-        <fields name="params">
-            <fieldset name="basic">
-                <field name="legacy"
-                    label="PLG_CONTENT_SHACKHIDER_CONFIG_LEGACY_LABEL"
-                    description="PLG_CONTENT_SHACKHIDER_CONFIG_LEGACY_DESC"
-                    type="radio"
-                    class="btn-group btn-group-yesno"
-                    default="1">
-                    <option value="1">JYES</option>
-                    <option value="0">JNO</option>
-                </field>
-            </fieldset>
-        </fields>
-    </config>
-
     <alledia>
         <element publish="false" ordering="last">shackhider</element>
         <namespace>ShackHider</namespace>
