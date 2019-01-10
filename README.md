@@ -1,61 +1,34 @@
-[![Alledia](https://www.alledia.com/images/logo_circle_small.png)](https://www.alledia.com)
+[![Joomlashack](https://www.joomlashack.com/images/logo_circle_small.png)](https://www.joomlashack.com)
 
-OSHider
-===========
+ShackHider
+==========
 
 ## About
 
 This content plugin allows you show or hide content based on user group, access level, user, login status.
-The basic shortcodes are {osshow} and {oshide} with parameters.
+The basic shortcodes are {jsshow} and {jshide} with parameters.
 
 ## Examples
+```
+{jsshow registered}show this content to logged in users{/jsshow}
 
-{osshow registered}show this content to logged in users{/osshow}
+{jsshow guest}show this content only to users who are not logged in{/jsshow}
 
-{osshow guest}show this content only to users who are not logged in{/osshow}
+{jshide userid="501,650"}Hide this from user IDs 501 and 650{\jshide}
 
-{oshide userid="501,650"}Hide this from user IDs 501 and 650{\oshide}
+{jshide email="help@joomlashack.com"}Hide this from logged in user with this email address{/jshide}
 
-{oshide email="support@ostraining.com"}Hide this from logged in user with this email address{/oshide}
+{jsshow username="john,paul,george,ringo"}Show this content only to logged in users with these usernames{/jsshow}
 
-{osshow username="john,paul,george,ringo"}Show this content only to logged in users with these usernames{/osshow}
+{jsshow group="manager,administrator"}Show to the selected named user groups{/jsshow}
 
-{osshow group="manager,administrator"}Show to the selected named user groups{/osshow}
+{jsshow group="5,6,10"}Selected user group IDs. NOTE: you cannot mix IDs and names{/jsshow}
 
-{osshow group="5,6,10"}Selected user group IDs. NOTE: you cannot mix IDs and names{/osshow}
+{jsshow access="Super Users"}Show this only to super users{/jsshow}
 
-{osshow access="Super Users"}Show this only to super users{/osshow}
+{jsshow access="3,6"}Show this only to users based on access level ID. DO NOT mix acl ids and names{/jsshow}
+```
 
-{osshow access="3,6"}Show this only to users based on access level ID. DO NOT mix acl ids and names{/osshow}
-
-## Legacy Support
-OSHider optionally supports the shortcodes from the Dioscuri plugin that was the inspiration for OSHider.
-These shortcodes will show enclosed content as follows:
-
-* Login status
-  * {reg}{/reg}
-  * {register}{/register} [Not originally from Hider]
-  * {pub}{/pub}
-  
-* Named user groups
-  * {author}{/author}
-  * {editor}{/editor}
-  * {publisher}{/publisher}
-  * {manager}{/manager}
-  * {admin}{/admin}
-  * {super}{/super}
-  
-* Numbered User groups
-  * {19}{/19}
-  * {20}{/20}
-  * {21}{/21}
-  * {23}{/23}
-  * {24}{/24}
-  * {25}{/25}
-
-* Access Level
-  * {special}{/special}
-  
 ## Requirements
 
 Joomla 3.x
