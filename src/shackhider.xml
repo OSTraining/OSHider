@@ -10,24 +10,6 @@
     <version>1.0.2</version>
     <description>PLG_CONTENT_SHACKHIDER_DESCRIPTION</description>
 
-    <alledia>
-        <element publish="false" ordering="last">shackhider</element>
-        <namespace>ShackHider</namespace>
-        <license>free</license>
-        <relatedExtensions>
-            <extension
-                type="library"
-                element="allediaframework">AllediaFramework</extension>
-
-            <extension
-                type="plugin"
-                group="system"
-                element="ossystem"
-                publish="false"
-                ordering="first">OSSystem</extension>
-        </relatedExtensions>
-    </alledia>
-
     <scriptfile>script.installer.php</scriptfile>
 
     <files>
@@ -35,6 +17,7 @@
         <folder>language</folder>
         <folder>library</folder>
         <folder>views</folder>
+
         <filename plugin="shackhider">shackhider.php</filename>
         <filename>include.php</filename>
     </files>
@@ -42,8 +25,7 @@
     <config>
         <fields name="params">
             <fieldset name="basic">
-                <field
-                    name="legacy"
+                <field name="legacy"
                     label="PLG_CONTENT_SHACKHIDER_CONFIG_LEGACY_LABEL"
                     description="PLG_CONTENT_SHACKHIDER_CONFIG_LEGACY_DESC"
                     type="radio"
@@ -55,4 +37,20 @@
             </fieldset>
         </fields>
     </config>
+
+    <alledia>
+        <element publish="false" ordering="last">shackhider</element>
+        <namespace>ShackHider</namespace>
+        <license>free</license>
+        <relatedExtensions>
+            <extension type="library"
+                       element="allediaframework">AllediaFramework</extension>
+
+            <extension type="plugin"
+                       group="system"
+                       element="ossystem"
+                       publish="false"
+                       ordering="first">OSSystem</extension>
+        </relatedExtensions>
+    </alledia>
 </extension>
