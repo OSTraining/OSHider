@@ -10,7 +10,7 @@ use Alledia\Installer\AbstractScript;
 
 defined('_JEXEC') or die();
 
-require_once 'library/Installer/include.php';
+require_once __DIR__ . '/library/Installer/include.php';
 
 class PlgcontentShackhiderInstallerScript extends AbstractScript
 {

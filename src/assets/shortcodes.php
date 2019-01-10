@@ -67,7 +67,7 @@ class JoomlashackShortcodes
                     if ($close < $next) {
                         // Closed tag with content
                         $content = substr($segment, 0, $close);
-                        $source .= $content . $closeTag;
+                        $source  .= $content . $closeTag;
 
                     } else {
                         // Open tag has no content

@@ -8,14 +8,6 @@
 
 defined('_JEXEC') or die();
 
-// Initialize if needed
-if (!defined('SHACKHIDER_PLUGIN_PATH')) {
-    define('SHACKHIDER_PLUGIN_PATH', __DIR__);
-
-    JLoader::register('JoomlashackShortcodes', __DIR__ . '/assets/shortcodes.php');
-}
-
-// Init Alledia Framework if needed
 if (!defined('ALLEDIA_FRAMEWORK_LOADED')) {
     $allediaFrameworkPath = JPATH_SITE . '/libraries/allediaframework/include.php';
 
@@ -24,4 +16,10 @@ if (!defined('ALLEDIA_FRAMEWORK_LOADED')) {
     }
 
     require_once $allediaFrameworkPath;
+}
+
+if (!defined('SHACKHIDER_PLUGIN_PATH')) {
+    define('SHACKHIDER_PLUGIN_PATH', __DIR__);
+
+    JLoader::register('JoomlashackShortcodes', __DIR__ . '/assets/shortcodes.php');
 }
