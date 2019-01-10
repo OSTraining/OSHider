@@ -1,24 +1,29 @@
 {
-    "name"             : "alledia/oshider",
-    "description"      : "OSHider",
+    "name"             : "joomlashack/shackhider",
+    "description"      : "Conditionally Show/Hide text",
     "minimum-stability": "stable",
     "license"          : "GPL-2+",
     "type"             : "joomla.plugin",
     "extra"            : {
-        "element"        : "plg_content_oshider",
-        "element-short"  : "oshider",
-        "name"           : "OSHider",
+        "target-platform": "3.*",
+        "element"        : "plg_content_shackhider",
+        "element-short"  : "shackhider",
+        "name"           : "ShackHider",
         "folder"         : "content",
         "client"         : "site",
         "package-license": "free"
     },
     "authors"          : [
         {
-            "name" : "Alledia",
-            "email": "support@alledia.com"
+            "name" : "Joomlashack",
+            "email": "help@joomlashack.com"
+        },
+        {
+            "name" : "Bill Tomczak",
+            "email": "bill@joomlashack.com.com"
         }
     ],
     "require"          : {
-        "php"       : ">= 5.3"
+        "php": ">= 5.6"
     }
 }
