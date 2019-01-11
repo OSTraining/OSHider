@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.5" type="plugin" group="content" method="upgrade">
+    <name>PLG_CONTENT_SHACKHIDER</name>
+    <author>Alledia</author>
+    <creationDate>January 10 2019</creationDate>
+    <copyright>Copyright (C) 2016 Alledia.com</copyright>
+    <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+    <authorEmail>support@alledia.com</authorEmail>
+    <authorUrl>http://www.alledia.com</authorUrl>
+    <version>2.0.0b1</version>
+    <description>PLG_CONTENT_SHACKHIDER_DESCRIPTION</description>
+
+    <scriptfile>script.installer.php</scriptfile>
+
+    <files>
+        <folder>assets</folder>
+        <folder>language</folder>
+        <folder>library</folder>
+        <folder>views</folder>
+
+        <filename plugin="shackhider">shackhider.php</filename>
+        <filename>include.php</filename>
+    </files>
+
+    <alledia>
+        <element publish="false" ordering="last">shackhider</element>
+        <namespace>ShackHider</namespace>
+        <license>free</license>
+        <relatedExtensions>
+            <extension type="library"
+                       element="allediaframework">AllediaFramework</extension>
+
+            <extension type="plugin"
+                       group="system"
+                       element="ossystem"
+                       publish="false"
+                       ordering="first">OSSystem</extension>
+        </relatedExtensions>
+    </alledia>
+</extension>

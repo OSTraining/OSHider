@@ -1,10 +1,24 @@
 <?php
 /**
- * @package   OSHider
- * @contact   www.alledia.com, support@alledia.com
- * @copyright 2015 Alledia.com, All rights reserved
- * @license   http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
- * @fork      Most of the code is forked from http://dioscouri.com/joomla-extensions/non-commercial-extensions/hider
+ * @package   ShackHider
+ * @contact   www.joomlashack.com, help@joomlashack.com
+ * @copyright 2016-2019 Open Source Training, LLC. All rights reserved
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
+ *
+ * This file is part of ShackHider.
+ *
+ * ShackHider is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * ShackHider is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with ShackHider.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 use Alledia\Framework\Joomla\Extension\AbstractPlugin;
@@ -14,20 +28,20 @@ defined('_JEXEC') or die();
 require_once 'include.php';
 
 /**
- * OSHider Content Plugin
+ * ShackHider Content Plugin
  *
  */
-class PlgContentOSHider extends AbstractPlugin
+class PlgContentShackhider extends AbstractPlugin
 {
     /**
      * @var string
      */
-    protected $namespace = 'OSHider';
+    protected $namespace = 'ShackHider';
 
     protected $autoloadLanguage = true;
 
     /**
-     * @var OstrainingShortcodes
+     * @var JoomlashackShortcodes
      */
     protected $finder = null;
 
@@ -49,6 +63,9 @@ class PlgContentOSHider extends AbstractPlugin
     /**
      * @param string $context
      * @param object $article
+     *
+     * @return void
+     * @throws Exception
      */
     public function onContentPrepare($context, $article)
     {
@@ -56,9 +73,9 @@ class PlgContentOSHider extends AbstractPlugin
             return;
         }
 
-        $codes = $this->find($article->text, array('osshow', 'oshide'));
+        $codes = $this->find($article->text, array('jsshow', 'jshide'));
         foreach ($codes as $code => $items) {
-            $show = ($code == 'osshow');
+            $show = ($code == 'jsshow');
             foreach ($items as $item) {
                 foreach ($item->params as $param => $value) {
                     $method = 'replace' . ucfirst(strtolower($param));
@@ -69,10 +86,6 @@ class PlgContentOSHider extends AbstractPlugin
                     }
                 }
             }
-        }
-
-        if ($this->params->get('legacy', 1)) {
-            $this->processLegacyTags($article->text);
         }
     }
 
@@ -87,7 +100,7 @@ class PlgContentOSHider extends AbstractPlugin
     protected function find($text, array $codes)
     {
         if ($this->finder === null) {
-            $this->finder = new OstrainingShortcodes();
+            $this->finder = new JoomlashackShortcodes();
         }
 
         return $this->finder->find($text, $codes);
@@ -247,7 +260,11 @@ class PlgContentOSHider extends AbstractPlugin
         if ($this->userGroups === null) {
             $db = JFactory::getDbo();
 
-            $db->setQuery('Select id,title From #__usergroups');
+            $db->setQuery(
+                $db->getQuery(true)
+                    ->select('id,title')
+                    ->from('#__usergroups')
+            );
             $groups = $db->loadObjectList();
 
             $this->userGroups = array();
@@ -267,7 +284,11 @@ class PlgContentOSHider extends AbstractPlugin
         if ($this->accessLevels === null) {
             $db = JFactory::getDbo();
 
-            $db->setQuery('Select id, title From #__viewlevels');
+            $db->setQuery(
+                $db->getQuery(true)
+                    ->select('id, title')
+                    ->from('#__viewlevels')
+            );
             $accessLevels = $db->loadObjectList();
 
             $this->accessLevels = array();
@@ -277,89 +298,5 @@ class PlgContentOSHider extends AbstractPlugin
         }
 
         return $this->accessLevels;
-    }
-
-    /**
-     * Process tags that were supported by the Dioscury Hider plugin
-     *
-     * @param $text
-     */
-    protected function processLegacyTags(&$text)
-    {
-        // Let's look for the oddballs first
-        // flexible user match.
-        // NOTE: email matches will not work if email cloaking is enabled
-        if (preg_match_all('#{user:(.*?)}(.*?){/user}#s', $text, $matches)) {
-            $user = $this->getUser();
-            foreach ($matches[0] as $i => $source) {
-                $param = $matches[1][$i];
-                if ($user->id && ($param == $user->id || $param == $user->email || $param == $user->username)) {
-                    $text = str_replace($source, $matches[2][$i], $text);
-                } else {
-                    $text = str_replace($source, '', $text);
-                }
-            }
-        }
-
-        // csv Group name matches
-        if (preg_match_all('#{groups:(.*?)}(.*?){/groups}#s', $text, $matches)) {
-            foreach ($matches[0] as $i => $source) {
-                $this->replaceGroup($source, $matches[2][$i], '', $text, $matches[1][$i]);
-            }
-        }
-
-        // Tags in accepted format
-        $tags = array(
-            'author'    => 'author',
-            'editor'    => 'editor',
-            'publisher' => 'publisher',
-            'manager'   => 'manager',
-            'admin'     => 'administrator',
-            'super'     => 'super users',
-            'reg'       => null,
-            'register'  => null,
-            'pub'       => null,
-            'special'   => null,
-            '19'        => null,
-            '20'        => null,
-            '21'        => null,
-            '23'        => null,
-            '24'        => null,
-            '25'        => null,
-        );
-
-        $codes = $this->find($text, array_keys($tags));
-        foreach ($codes as $code => $items) {
-            foreach ($items as $item) {
-                if ((int)$code) {
-                    // Show only to users in group ID
-                    $this->replaceGroup($item->source, $item->content, '', $text, $code);
-
-                } else {
-                    switch ($code) {
-                        case 'reg':
-                        case 'register':
-                            // Show only to registered users
-                            $this->replaceRegistered($item->source, $item->content, '', $text);
-                            break;
-
-                        case 'pub':
-                            // Show only to public/guest users
-                            $this->replaceGuest($item->source, $item->content, '', $text);
-                            break;
-
-                        case 'special':
-                            // Show only to user in 'special' access level
-                            $this->replaceAccess($item->source, $item->content, '', $text, $code);
-                            break;
-
-                        default:
-                            // Show only to named user group
-                            $this->replaceGroup($item->source, $item->content, '', $text, $tags[$code]);
-                            break;
-                    }
-                }
-            }
-        }
     }
 }

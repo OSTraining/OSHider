@@ -1,15 +1,15 @@
 <?php
 /**
  * @package   Shortcode utility
- * @contact   www.ostraining.com, support@ostraining.com
- * @copyright 2016 Open Source Training, LLC. All rights reserved
+ * @contact   www.joomlashack.com, help@joomlashack.com
+ * @copyright 2016-2019 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
 
 /**
- * Class OstrainingShortcodes
+ * Class JoomlashackShortcodes
  *
  * Generic processor for custom short codes.
  *
@@ -23,7 +23,7 @@ defined('_JEXEC') or die();
  *
  * Usage:
  *
- * $shortcodes = new OstrainingShortcodes()
+ * $shortcodes = new JoomlashackShortcodes()
  * $items = $shortcodes->find($string, array('yourshortcode'));
  *
  * $items is an associative array keyed on the shortcode matched with each item object returned as:
@@ -33,7 +33,7 @@ defined('_JEXEC') or die();
  * @var string   $content The text between opening and closing tag or null for unclosed tag
  *
  */
-class OstrainingShortcodes
+class JoomlashackShortcodes
 {
     /**
      * @param string   $text       The text to search
@@ -67,7 +67,7 @@ class OstrainingShortcodes
                     if ($close < $next) {
                         // Closed tag with content
                         $content = substr($segment, 0, $close);
-                        $source .= $content . $closeTag;
+                        $source  .= $content . $closeTag;
 
                     } else {
                         // Open tag has no content
